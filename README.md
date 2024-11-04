@@ -1,6 +1,6 @@
 # resolved-bot
 ## IMPORTANT UPDATE
-We currently have no plans to keep the bot up to date, and it is probably not functional. All proposed diffs and patches from the community will still be actively reviewed however.
+We currently plans to keep the bot up to date, and it is probably not functional. All proposed diffs and patches from the community will still be actively reviewed however.
 ## Description
 Resolved is a combination of the following:
 1. A go API to resy
@@ -78,7 +78,3 @@ Here are the last remaining commands:
 8. `clean` takes in a list of ids using the `-i` flag and will remove the operation information from the system(i.e. it will no longer be displayed from the list command). Operations can only be cleaned once they are no longer in progress.
 9. `exit/quit` leaves the prompt
 10. `help` outputs helpful information about each command
-
-## How To Contribute
-
-I am open and happy to accept contributions from anyone who wants to offer them. To get started on this, read the `Contribution Etiquette` post in the issue section of this project, which should be pinned. Another document which might be helpful in getting adjusted to the project is the `Architecture Overview` issue post, which provides an overhead view to what each part of the codebase does. Generally, any helpful information can be found in the issue section labelled with `information`. I'm avaialble at `brucejagid@gmail.com`; feel free to send any questions to that address.
