@@ -1,0 +1,80 @@
+package main
+
+import (
+    "fmt"
+    "io"
+    "net/http"
+    "net/http/httputil"
+    "strings"
+    "time"
+)
+
+func main() {
+    // Define the detail URL
+    detailUrl := "https://api.resy.com/3/details"
+    fmt.Printf("Detail URL: %s\n", detailUrl)
+
+    // Prepare the request body as a string
+    requestBody := `{"commit":1,"config_id":"rgs://resy/77868/2632700/3/2024-10-15/2024-10-16/11:45:00/3/Dining Room","day":"2024-10-15","party_size":"3"}`
+
+    fmt.Printf("Request Body: %s\n", requestBody)
+
+    // Create a new HTTP POST request with the JSON body
+    requestDetail, err := http.NewRequest("POST", detailUrl, strings.NewReader(requestBody))
+    if err != nil {
+        fmt.Printf("Error creating detail request: %v\n", err)
+        return
+    }
+
+    // Set the appropriate headers
+    requestDetail.Header.Set("Content-Type", "application/json")
+    requestDetail.Header.Set("Authorization", "ResyAPI api_key=\"VbWk7s3L4KiK5fzlO7JD3Q5EYolJI7n5\"")
+    requestDetail.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+
+    // Print the full request for debugging
+    requestDump, err := httputil.DumpRequestOut(requestDetail, true)
+    if err != nil {
+        fmt.Printf("Error dumping request: %v\n", err)
+    } else {
+        fmt.Printf("Full Request:\n%s\n", string(requestDump))
+    }
+
+    // Create an HTTP client with a timeout
+    client := &http.Client{
+        Timeout: 10 * time.Second,
+    }
+
+    // Send the request
+    response, err := client.Do(requestDetail)
+    if err != nil {
+        fmt.Printf("Error making HTTP request: %v\n", err)
+        return
+    }
+    defer response.Body.Close()
+
+    // Print the status code
+    fmt.Printf("Response Status Code: %d\n", response.StatusCode)
+
+    // Print full response headers
+    fmt.Printf("Response Headers:\n")
+    for name, values := range response.Header {
+        for _, value := range values {
+            fmt.Printf("%s: %s\n", name, value)
+        }
+    }
+
+    // Read the raw response body
+    bodyBytes, err := io.ReadAll(response.Body)
+    if err != nil {
+        fmt.Printf("Error reading response body: %v\n", err)
+        return
+    }
+    fmt.Printf("Raw Response Body: %s\n", string(bodyBytes))
+
+    if response.StatusCode != http.StatusOK {
+        fmt.Printf("Error: Received status code %d\n", response.StatusCode)
+        return
+    }
+
+    fmt.Printf("Response: %s\n", string(bodyBytes))
+}
